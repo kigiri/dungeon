@@ -318,35 +318,6 @@ body.font-loaded {
   create.css('#right-pane.pane', ``, editorElem),
 ])
 
-const codemirrorUrl = path =>
-  `/${path}`
-  //`https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/${path}`
-
-const codemirrorOpts = [
-  //'addon/search/searchcursor.js',
-  //'addon/search/search.js',
-  //'addon/dialog/dialog.js',
-  //'addon/edit/matchbrackets.js',
-  //'addon/edit/closebrackets.js',
-  //'addon/comment/comment.js',
-  //'addon/wrap/hardwrap.js',
-  //'addon/fold/foldcode.js',
-  //'addon/fold/brace-fold.js',
-  //'mode/javascript/javascript.js',
-  //'keymap/sublime.js',
-  'searchcursor.js',
-  'search.js',
-  'dialog.js',
-  'matchbrackets.js',
-  'closebrackets.js',
-  'comment.js',
-  'hardwrap.js',
-  'foldcode.js',
-  'brace-fold.js',
-  'javascript.js',
-  'sublime.js',
-]
-
 const Script = prepare.script({ async: true })
 const loadScript = src => new Promise((onload, onerror) =>
   append(document.body, Script({ src, onload, onerror })))
@@ -357,18 +328,28 @@ const loadStyle = href =>  new Promise((onload, onerror) =>
 
 append(document.body, root)
 
-const prefetchFont = loadStyle('/font.css')
+const prefetchFont = loadStyle('font.css')
 Promise.all([
-  //'https://cdn.rawgit.com/adamschwartz/log/71f3f999/log.min.js',
-  '/log.min.js',
-  codemirrorUrl('codemirror.js'),
+  'log.min.js',
+  'codemirror.js',
 ].map(loadScript).concat([
-  codemirrorUrl('codemirror.css'),
-  // codemirrorUrl('theme/dracula.css'),
-  codemirrorUrl('dracula.css'),
+  'codemirror.css',
+  'dracula.css',
 ].map(loadStyle))).then(async () => {
   log('heyy')
-  await Promise.all(codemirrorOpts.map(codemirrorUrl).map(loadScript))
+  await Promise.all([
+    'searchcursor.js',
+    'search.js',
+    'dialog.js',
+    'matchbrackets.js',
+    'closebrackets.js',
+    'comment.js',
+    'hardwrap.js',
+    'foldcode.js',
+    'brace-fold.js',
+    'javascript.js',
+    'sublime.js',
+  ].map(loadScript))
   await prefetchFont
   
   document.body.classList.add('font-loaded')
