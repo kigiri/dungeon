@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head><title>The Dungeon - Tile selector</title></head>
+<body>
+<script type="module">
+import { create, prepare, append } from './h.js'
+
+let y = 0
+let x = 0
+
+const text = create.css(`white-space: pre`)
+
+const tileOutline = create.css(`
+  width: 6.25vh;
+  height: 6.25vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: red;
+  opacity: 0.5;
+`)
+
+const update = () => {
+  const index = y * 16 + x
+  text.textContent = `
+    x ${x}
+    y ${y}
+    i ${index}
+    a ${index + 256}`
+  tileOutline.style.top = `${100/16 * y}vh`
+  tileOutline.style.left = `${100/16 * x}vh`
+}
+
+update()
+
+const root = create.css('#root', `
+@import url('https://fonts.googleapis.com/css?family=VT323');
+
+body, html {
+  padding: 0;
+  margin: 0;
+  background: #333;
+  font-family: 'VT323', monospace;
+  color: #bada55;
+}
+
+._ .CodeMirror {
+  height: 100vh;
+  font-size: 16px;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+}
+
+._ {
+  font-size: 6vh;
+  display: flex;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+  image-rendering: optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+`, [
+  create({
+    onclick: e => {
+      const size = (e.target.clientHeight / 16)
+      y = Math.floor(e.y / size)
+      x = Math.floor(e.x / size)
+      update()
+    },
+    css: `
+      width: 100vh;
+      height: 100vh;
+      background-image: url('tile-${location.hash.slice(1) || 'dungeon'}.png');
+      background-size: 100%;
+      background-repeat: no-repeat;
+    `
+  }),
+  text,
+  tileOutline
+])
+
+append(document.body, root)
+
+</script>
+</body>
+</html>
