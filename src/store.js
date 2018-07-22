@@ -5,7 +5,10 @@ export const state = Object.create(null)
 
 export const subscribe = (key, handler) => Array.isArray(key)
   ? key.forEach(k => subscribe(k, handler))
-  : (listenners[key] || (listenners[key] = [])).push(handler)
+  : ((listenners[key] || (listenners[key] = [])).push(handler), handler(state))
+
+export const subscribeValue = (key, handler) =>
+  subscribe(key, () => handler(state[key]))
 
 export const setState = (key, value) => {
   if (state[key] !== value) {

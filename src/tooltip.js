@@ -8,18 +8,6 @@ import { color } from './color.js'
 const tooltips = []
 export const addToolTip = (elem, content) => tooltips.push([ elem, content ])
 
-subscribe('hover', state => {
-  const { hover } = state
-  for (const [ elem, content ] of tooltips) {
-    if (hover === elem || elem.contains(hover)) {
-      replace(toolTipElem, content)
-      toolTipElem.style.display = ''
-      return
-    }
-  }
-  toolTipElem.style.display = 'none'
-})
-
 
 const toolTipSize = mapSize/2
 const toolTipElem = create.css('.tooltip.no-select', `
@@ -39,6 +27,18 @@ const toolTipElem = create.css('.tooltip.no-select', `
 
 watch(toolTipElem, 'clientHeight', 'tooltipHeight')
 watch(toolTipElem, 'clientWidth', 'tooltipWidth')
+
+subscribe('hover', state => {
+  const { hover } = state
+  for (const [ elem, content ] of tooltips) {
+    if (hover === elem || elem.contains(hover)) {
+      replace(toolTipElem, content)
+      toolTipElem.style.display = ''
+      return
+    }
+  }
+  toolTipElem.style.display = 'none'
+})
 
 subscribe([
   'mouseX',
