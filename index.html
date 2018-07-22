@@ -3,10 +3,10 @@
 <head><title>The Dungeon</title></head>
 <body>
 <script type="module">
-import { create, prepare, append, replace, injectCss } from './h.js'
-import { items } from './items.js'
-import { subscribe } from './store.js'
-import { watch } from './events.js'
+import { create, prepare, append, replace, injectCss } from './src/h.js'
+import { items } from './src/items.js'
+import { subscribe } from './src/store.js'
+import { watch } from './src/events.js'
 
 const mapSize = 70
 const tileSize = mapSize / 16
@@ -17,7 +17,7 @@ const px2 = px(2)
 const px3 = px(3)
 const tilesImages = [ 'dungeon', 'walls' ]
 const getTileFromIndex = i => ({
-  backgroundImage: `url(tile-${tilesImages[Math.floor(i/256)]}.png)`,
+  backgroundImage: `url(assets/tile-${tilesImages[Math.floor(i/256)]}.png)`,
   backgroundColor: i === 289 ? color.bg : '',
   backgroundPosition:
     `-${((i%256) % 16) * tileSize}vh -${Math.floor((i%256) / 16) * tileSize}vh`,
@@ -87,7 +87,7 @@ const Portrait = prepare.css(`.portrait.${boxClass}.${tileClass}`, `
   width: ${playerCardSize}vh;
   display: flex;
   align-item: center;
-  background-image: url(tile-dungeon.png);
+  background-image: url(assets/tile-dungeon.png);
   background-position: 0vh -18.5vh;
   background-size: 60vh;
   box-shadow:
@@ -234,7 +234,7 @@ const ItemContent = prepare.css('.item', `
   width: ${itemSize}vh;
   outline: ${px1} solid ${color.fgDark};
   outline-offset: -${px2};
-  background-image: url(tile-items.png);
+  background-image: url(assets/tile-items.png);
   background-size: ${px(120)};
   background-repeat: no-repeat;
   background-position: 100vh;
@@ -434,27 +434,27 @@ const loadStyle = href =>  new Promise((onload, onerror) =>
 
 append(document.body, root)
 
-const prefetchFont = loadStyle('font.css')
+const prefetchFont = loadStyle('assets/font.css')
 Promise.all([
-  'log.min.js',
-  'codemirror.js',
+  'lib/log.min.js',
+  'lib/codemirror.js',
 ].map(loadScript).concat([
-  'codemirror.css',
-  'dracula.css',
+  'assets/codemirror.css',
+  'assets/dracula.css',
 ].map(loadStyle))).then(async () => {
   log('heyy')
   await Promise.all([
-    'searchcursor.js',
-    'search.js',
-    'dialog.js',
-    'matchbrackets.js',
-    'closebrackets.js',
-    'comment.js',
-    'hardwrap.js',
-    'foldcode.js',
-    'brace-fold.js',
-    'javascript.js',
-    'sublime.js',
+    'lib/searchcursor.js',
+    'lib/search.js',
+    'lib/dialog.js',
+    'lib/matchbrackets.js',
+    'lib/closebrackets.js',
+    'lib/comment.js',
+    'lib/hardwrap.js',
+    'lib/foldcode.js',
+    'lib/brace-fold.js',
+    'lib/javascript.js',
+    'lib/sublime.js',
   ].map(loadScript))
   await prefetchFont
   
