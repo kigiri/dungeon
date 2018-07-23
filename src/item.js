@@ -1,7 +1,7 @@
 import { create, prepare, replace } from './h.js'
 import { pixelSize, px, itemSize } from './size.js'
 import { addToolTip } from './tooltip.js'
-import { subscribeValue } from './store.js'
+import { sub } from './store.js'
 import { color } from './color.js'
 
 const ItemContent = prepare.css('.item', `
@@ -10,7 +10,7 @@ const ItemContent = prepare.css('.item', `
   outline: ${px(1)} solid ${color.fgDark};
   outline-offset: -${px(2)};
   background-image: url(assets/tile-items.png);
-  background-size: ${px(120)};
+  background-size: 720%;
   background-repeat: no-repeat;
   background-position: 100vh;
   box-shadow:
@@ -19,13 +19,12 @@ const ItemContent = prepare.css('.item', `
 `)
 
 export const Item = (player, slot) => {
-  const padding = pixelSize * 2
-  const size = pixelSize * 15
+  const padding = 1
   const content = ItemContent()
   const itemText = create.span('')
 
   const key = `player${player}Item${slot}`
-  subscribeValue(key, item => {
+  sub(key, item => {
     if (!item) {
       content.style.backgroundPosition = `-1000vh`
       return replace(itemText, `no items - slot ${slot}`)
@@ -34,7 +33,7 @@ export const Item = (player, slot) => {
     replace(itemText, `${type}-${luck} - slot ${slot}`)
     const x = icon % 8
     const y = Math.floor(icon / 8)
-    content.style.backgroundPosition = `${-x*size + padding}vh ${-y*size + padding}vh`
+    content.style.backgroundPosition = `${x*14.5-1}% ${(y*12.7)-1}%`
   })
 
   addToolTip(content, itemText)

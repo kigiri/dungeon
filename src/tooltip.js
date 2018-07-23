@@ -1,4 +1,4 @@
-import { subscribe } from './store.js'
+import { sub, subscribe } from './store.js'
 import { watch } from './events.js'
 import { create, replace } from './h.js'
 import { pixelSize, mapSize, px } from './size.js'
@@ -7,7 +7,6 @@ import { color } from './color.js'
 
 const tooltips = []
 export const addToolTip = (elem, content) => tooltips.push([ elem, content ])
-
 
 const toolTipSize = mapSize/2
 const toolTipElem = create.css('.tooltip.no-select', `
@@ -18,9 +17,11 @@ const toolTipElem = create.css('.tooltip.no-select', `
   background: ${color.bgDark}ee;
   font-size: ${px(7)};
   color: ${color.fgLight};
+  opacity: 0;
   text-shadow: ${pixelSize*0.4}vh ${pixelSize*0.4}vh rgba(0,0,0,0.5);
   display: flex;
   max-width: ${toolTipSize}vh;
+  transition: opacity 0.2s ease-in;
   box-shadow:
     0 0 0 ${px(1)} ${color.dark}ee;
 `, 'heyyy')
@@ -28,16 +29,15 @@ const toolTipElem = create.css('.tooltip.no-select', `
 watch(toolTipElem, 'clientHeight', 'tooltipHeight')
 watch(toolTipElem, 'clientWidth', 'tooltipWidth')
 
-subscribe('hover', state => {
-  const { hover } = state
+sub('hover', hover => {
   for (const [ elem, content ] of tooltips) {
     if (hover === elem || elem.contains(hover)) {
       replace(toolTipElem, content)
-      toolTipElem.style.display = ''
+      toolTipElem.style.opacity = 1
       return
     }
   }
-  toolTipElem.style.display = 'none'
+  toolTipElem.style.opacity = 0
 })
 
 subscribe([

@@ -1,4 +1,4 @@
-import { setState, addWatcher } from './store.js'
+import { getState, setState, addWatcher } from './store.js'
 
 const mouseKeys = Object.create(null)
 mouseKeys[1] = 'mouseL'
@@ -10,17 +10,17 @@ const handleMousePosition = e => {
   setState('mouseY', e.pageY || 0)
   setState('hover', e.target)
   if (!e.which) {
-    setState('mouseL', undefined)
-    setState('mouseM', undefined)
-    setState('mouseR', undefined)
+    setState('mouseL', null)
+    setState('mouseM', null)
+    setState('mouseR', null)
   }
 }
 
 window.addEventListener('mousemove', handleMousePosition, false)
-window.addEventListener('mouseleave', e => setState('hover', undefined), false)
+window.addEventListener('mouseleave', e => setState('hover', null), false)
 
 window.addEventListener('mouseup', e => {
-  setState(mouseKeys[e.which], undefined)
+  setState(mouseKeys[e.which], null)
   handleMousePosition(e)
 }, false)
 
@@ -38,6 +38,6 @@ export const watch = (elem, key, stateKey = key) => {
 watch(window, 'innerHeight', 'windowHeight')
 watch(window, 'innerWidth', 'windowWidth')
 
-// window.addEventListener('keyup', e => setState(`key${e.key}`, undefined), false)
+// window.addEventListener('keyup', e => setState(`key${e.key}`, null), false)
 // window.addEventListener('keydown', e => setState(`key${e.key}`, Date.now()), false)
 
