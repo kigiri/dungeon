@@ -3,7 +3,7 @@
 <head><title>The Dungeon - Tile selector</title></head>
 <body>
 <script type="module">
-import { create, prepare, append } from './h.js'
+import { create, prepare, append } from '../src/h.js'
 
 let y = 0
 let x = 0
@@ -76,7 +76,7 @@ body, html {
     css: `
       width: 100vh;
       height: 100vh;
-      background-image: url('tile-${location.hash.slice(1) || 'dungeon'}.png');
+      background-image: url('../assets/tile-${location.hash.slice(1) || 'dungeon'}.png');
       background-size: 100%;
       background-repeat: no-repeat;
     `

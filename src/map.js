@@ -1,19 +1,8 @@
 import { create, prepare, injectCss } from './h.js'
 import { color } from './color.js'
 import { mapSize, tileSize, px } from './size.js'
+import { tileClass, tilesImages } from './texture.js'
 
-export const tileClass = injectCss(`
-  background-repeat: no-repeat;
-  image-rendering: optimizeSpeed;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -o-crisp-edges;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: pixelated;
-  image-rendering: optimize-contrast;
-  -ms-interpolation-mode: nearest-neighbor;
-`)
-
-const tilesImages = [ 'dungeon', 'walls' ]
 const getTileFromIndex = i => ({
   backgroundImage: `url(assets/tile-${tilesImages[Math.floor(i/256)]}.png)`,
   backgroundPosition:

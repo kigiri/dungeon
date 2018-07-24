@@ -12,40 +12,33 @@ const timedMap = new Map
 const isTimed = key => timedMap.has(key)
   ? timedMap.get(key)
   : timedMap
-    .set(key, key.endsWith('Position')
+    .set(key, key.endsWith('Cell')
       || key.endsWith('Life')
       || key.endsWith('Mana')
-      || key.endsWith('Experience')
-      || key.includes('Current'))
+      || key.endsWith('Experience'))
     .get(key)
 
 const setTimed = (keys, values, key, value) => {
   const { levelCurrentTime } = state
-  const prevKey = keys[keys.length - 1]
-  if (prevKey && values[prevKey] === value) return
+  const time = keys[keys.length - 1]
+  if (time && values[time] === value) return
   values[levelCurrentTime] = value
   updatedKeys.add(key)
   keys.push(levelCurrentTime)
-
-  if (!(prevKey < levelCurrentTime)) {
-    keys.sort(descending)
-  }
+  time < levelCurrentTime || keys.sort(descending)
 }
 
 const getTimed = (keys, values, key) => {
   const { levelCurrentTime } = state
   let i = keys.length
   while (--i > -1) {
-    const key = keys[i]
-    if (key <= levelCurrentTime) return values[key]
+    if (keys[i] <= levelCurrentTime) return values[keys[i]]
   }
 }
 
 const get = key => state[key]
-const set = (key, value) => {
-  if (state[key] === value) return
-  updatedKeys.add(key)
-}
+const set = (key, value) => state[key] === value
+  || (state[key] = value, updatedKeys.add(key))
 
 export const subscribe = (key, handler) => Array.isArray(key)
   ? key.forEach(k => subscribe(k, handler))
@@ -60,15 +53,14 @@ export const sub = (key, handler) => {
 }
 
 export const getState = key => {
-  if (!isTimed(key)) return state[key]
+  if (!isTimed(key)) return get(key)
   const { keys, values } = getTimedValue(key)
   return getTimed(keys, values, key)
 }
 
 export const setState = (key, value) => {
-  if (state[key] === value) return
+  if (!isTimed(key)) return set(key, value)
   updatedKeys.add(key)
-  if (!isTimed(key)) return state[key] = value
   const { keys, values } = getTimedValue(key)
   return setTimed(keys, values, key, value)
 }
@@ -82,6 +74,8 @@ export const setDeep = (key, obj) => {
     setState(key, obj)
   }
 }
+
+export const getTime = () => state.levelCurrentTime
 
 export const addWatcher = watcher => watchers.push(watcher)
 
@@ -122,7 +116,6 @@ const getAccessor = key => {
   if (key in accessorsCache) return accessorsCache[key]
   if (key in state) {
     if (isTimed(key)) {
-      console.log('heyy', key)
       const T = getTimedValue(key)
       return accessorsCache[key] = { get: timedGetter(T), set: timedSetter(T) }
     }

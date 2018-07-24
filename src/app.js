@@ -5,13 +5,13 @@ import { getState, setState, sub, state } from './store.js'
 import { mapSize, px, playerCardSize } from './size.js'
 import { color } from './color.js'
 import { Bar } from './bar.js'
-import { mapElem, tileClass } from './map.js'
+import { mapElem } from './map.js'
+import { tileClass } from './texture.js'
 import { Stat, StatText, StatContainer } from './stat.js'
 import { initLevel, play } from './level.js'
 import './entity.js'
 
 const { mouse, level } = state()
-
 console.log({ mouse, level })
 
 const boxClass = injectCss(`

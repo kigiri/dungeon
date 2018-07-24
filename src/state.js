@@ -18,6 +18,7 @@ Object.entries({
     name: 'player0',
     life: 10,
     mana: 0,
+    cell: 30,
     experience: 0,
     lifeMax: 100,
     manaMax: 100,
@@ -33,6 +34,7 @@ Object.entries({
     name: 'player1',
     life: 0,
     mana: 0,
+    cell: 31,
     experience: 0,
     lifeMax: 100,
     manaMax: 100,
@@ -52,6 +54,21 @@ Object.entries({
     m: null,
   }
 }).forEach(args => setDeep(...args))
+
+const FX = (name, frames, height = 1, width = 1) =>
+  ({ type: 'fx', name, frames, height, width })
+
+export const fx = {
+  bubble: FX('bubble', 14),
+  explode: FX('explode-a', 12),
+  explodeMagic: FX('explode-b', 12),
+  explodeIce: FX('explode-c', 12),
+  explodePoison: FX('explode-d', 12),
+  explodeSmoke: FX('explode-e', 12),
+  fire1: FX('fire1', 8, 2),
+  fire2: FX('fire2', 8, 2),
+  fire3: FX('fire3', 8, 2),
+}
 
 export const items = [
   { icon: 0, luck: 1, type: "sword" },
